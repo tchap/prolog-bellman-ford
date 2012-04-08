@@ -1,1 +1,1 @@
-Contact: `echo 'ondra*cap+gmail*com' | tr '*' '.' | tr '+' '@'`
+Contact: `echo 'ondra*cap+gmail*com' | tr '*+' '.@'`
