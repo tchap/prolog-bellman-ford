@@ -32,11 +32,13 @@ bf_visited(Gid, Vertex) :-
 bf(Gid, Start, Stop, Cost, Path) :-
 	g_vertex(Gid, Start),
 	g_vertex(Gid, Stop),
+	retractall(bf_shortest(Gid, _)),
 	bf_set_shortest(Gid, nill->Start/0),
 	g_edges(Gid, Edges),
 	length(Edges, M),
 	bf_loop(Gid, M),
-	bf_assemble_path(Gid, Start, Stop, Cost, Path),
+	bf_path_summary(Gid, Start, Stop, Cost, Path),
+	retractall(bf_shortest(Gid, _)),
 	!.
 
 bf_loop(_, 0) :- !.
@@ -87,10 +89,15 @@ bf_update_record(Gid, From->To, OldCost, NewCost) :-
 	NewCost < OldCost,
 	bf_set_shortest(Gid, From->To/NewCost).
 
-bf_assemble_path(Gid, _, _, _, Path) :-
-	findall(U->V/C, (
-		bf_shortest(Gid, U->V/C)
-	), Path).
+bf_path_summary(Gid, Start, Stop, Cost, Path) :-
+	bf_shortest(Gid, _->Stop/Cost),
+	bf_assemble_path(Gid, Start, [Stop], Path).
+
+bf_assemble_path(_, Start, [Start|RAcc], [Start|RAcc]) :- !.
+bf_assemble_path(Gid, Start, Acc, Path) :-
+	[To|_] = Acc,
+	bf_shortest(Gid, From->To/_),
+	bf_assemble_path(Gid, Start, [From|Acc], Path).
 
 %% Testing data
 
