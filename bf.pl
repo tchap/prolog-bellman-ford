@@ -4,6 +4,7 @@
 
 %% FOR PROLOG GURUS: 
 %% I also think that this implementation is disgustingly imperative ;-)
+%% (And while B-F is O(n*m), this one in fact always makes n*m steps :D)
 
 %% A graph is represented by
 %%
