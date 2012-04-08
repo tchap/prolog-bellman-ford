@@ -2,6 +2,9 @@
 %%% Bellman-Ford algorithm
 %%%
 
+%% FOR PROLOG GURUS: 
+%% I also think that this implementation is disgustingly imperative ;-)
+
 %% A graph is represented by
 %%
 %%	g(Id, Vertices, Edges)
