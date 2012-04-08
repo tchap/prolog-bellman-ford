@@ -2,6 +2,48 @@
 %%% Bellman-Ford algorithm
 %%%
 
+%% A graph is represented by
+%%
+%%	g(Id, Vertices, Edges)
+%%
+%% where:
+%% 	'Id' is unique integer identifying a graph (e.g. 1);
+%%	'Vertices' is a list of all vertices (e.g. [a, b, c] in case of atoms);
+%%	'Edges' is a list of all edges in form of From->To/Cost. 
+
+%% This implementation finds one kind of random shortest path!
+
+%% Demo output
+
+% g(
+%	1,
+%	[a,b,c,d,e,f],
+%	[a->b/1, b->c/1, c->d/1, d->e/1, e->f/1, a->d/1]
+% ).
+% ?- bf(1, a, f, Cost, Path).
+% Cost = 3,
+% Path = [a, d, e, f].
+
+% g(
+%	2,
+%	[a,b,c,d,e,f,g,h],
+%	[a->b/1, b->c/1, c->d/1, d->h/1,
+%	 a->e/2, e->f/2, f->g/2, g->h/2]
+% ).
+% ?- bf(2, a, h, Cost, Path).
+% Cost = 4,
+% Path = [a, b, c, d, h].
+
+% g(
+%	3,
+%	[a,b,c,d,e,f,g,h],
+%	[a->e/1, e->f/2, f->g/1, g->h/2,
+%	a->b/2, b->c/1, c->d/2, d->h/1]
+% ).
+% ?- bf(3, a, h, Cost, Path).
+% Cost = 6,
+% Path = [a, b, c, d, h].
+
 %% Graph supplementary rules
 
 :-op(400, xfy, ->).
@@ -19,6 +61,7 @@ g_vertex(Gid, Vertex) :-
 
 %% Bellman-Ford
 
+% bf(+Gid, +Start, +Stop, ?Cost, -Path) (+Cost does not make sense, though)
 bf(Gid, Start, Stop, Cost, Path) :-
 	g_vertex(Gid, Start),
 	g_vertex(Gid, Stop),
@@ -98,11 +141,3 @@ bf_assemble_path(Gid, Start, Acc, Path) :-
 	[To|_] = Acc,
 	bf_shortest(Gid, From->To/_),
 	bf_assemble_path(Gid, Start, [From|Acc], Path).
-
-%% Testing data
-
-g(
-	1,
-	[a,b,c,d,e,f],
-	[a->b/1, b->c/1, c->d/1, d->e/1, e->f/1, a->d/1]
-).
