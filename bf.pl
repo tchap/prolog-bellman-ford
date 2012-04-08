@@ -19,16 +19,6 @@ g_vertex(Gid, Vertex) :-
 
 %% Bellman-Ford
 
-bf_set_shortest(Gid, From->To/Cost) :-
-	retract(bf_shortest(Gid, From->To/_)),
-	asserta(bf_shortest(Gid, From->To/Cost)),
-	!.
-bf_set_shortest(Gid, From->To/Cost) :-
-	asserta(bf_shortest(Gid, From->To/Cost)).
-
-bf_visited(Gid, Vertex) :-
-	bf_shortest(Gid, _->Vertex/_).
-
 bf(Gid, Start, Stop, Cost, Path) :-
 	g_vertex(Gid, Start),
 	g_vertex(Gid, Stop),
@@ -40,6 +30,16 @@ bf(Gid, Start, Stop, Cost, Path) :-
 	bf_path_summary(Gid, Start, Stop, Cost, Path),
 	retractall(bf_shortest(Gid, _)),
 	!.
+
+bf_set_shortest(Gid, From->To/Cost) :-
+	retract(bf_shortest(Gid, From->To/_)),
+	asserta(bf_shortest(Gid, From->To/Cost)),
+	!.
+bf_set_shortest(Gid, From->To/Cost) :-
+	asserta(bf_shortest(Gid, From->To/Cost)).
+
+bf_visited(Gid, Vertex) :-
+	bf_shortest(Gid, _->Vertex/_).
 
 bf_loop(_, 0) :- !.
 bf_loop(Gid, M) :-
